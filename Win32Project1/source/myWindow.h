@@ -15,6 +15,8 @@ public:
     virtual void onLeftMouseButtonDown(int xPos, int yPos);
     virtual void onLeftClickButton(HWND buttonID);
     virtual void onResize();
+    virtual void onPressEnter();
+
 protected:
 private:
     HWND m_textBox1;

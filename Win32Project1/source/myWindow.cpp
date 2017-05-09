@@ -128,3 +128,8 @@ void myWindow::onResize()
     SetWindowPos(m_button1, NULL, 20, m_height / 2 + 20, m_width - 40, m_height / 2 - 80, SWP_NOZORDER);
     SetWindowPos(m_loadBar1, NULL, 20, m_clientRect.bottom - 40, m_width - 40, 20, SWP_NOZORDER);
 }
+
+void myWindow::onPressEnter()
+{
+
+}

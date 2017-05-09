@@ -15,6 +15,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
         SetWindowLong(hwnd, 0, (LONG)cs->lpCreateParams);
         break;
     }
+
     case WM_PAINT:
     {
         /*  We receive WM_PAINT every time window is updated  */
@@ -45,6 +46,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
             }
         }
         break;
+    }
+
+    case WM_KEYDOWN:
+    {
+        if (wParam == VK_RETURN)
+        {
+            window->onPressEnter();
+        }
     }
 
     case WM_SIZE:
