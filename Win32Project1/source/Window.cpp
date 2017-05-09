@@ -28,7 +28,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
     case WM_LBUTTONDOWN:
     {
-
         if (window)
         {
             window->onLeftMouseButtonDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
@@ -40,20 +39,18 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
     {
         if (window)
         {
+            // left click
             if (((HWND)lParam) && (HIWORD(wParam) == BN_CLICKED))
             {
                 window->onLeftClickButton((HWND)lParam);
             }
+            // pressed enter
+            else if (wParam = VK_RETURN || IDOK)
+            {
+                window->onPressEnter();
+            }
         }
         break;
-    }
-
-    case WM_KEYDOWN:
-    {
-        if (wParam == VK_RETURN)
-        {
-            window->onPressEnter();
-        }
     }
 
     case WM_SIZE:
