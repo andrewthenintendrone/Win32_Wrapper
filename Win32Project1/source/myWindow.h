@@ -14,9 +14,13 @@ public:
     virtual void onPaint();
     virtual void onLeftMouseButtonDown(int xPos, int yPos);
     virtual void onLeftClickButton(HWND buttonID);
+    virtual void onResize();
 protected:
 private:
     HWND m_textBox1;
     HWND m_button1;
     HWND m_loadBar1;
+    RECT m_clientRect;;
+    int m_width;
+    int m_height;
 };

@@ -47,6 +47,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
         break;
     }
 
+    case WM_SIZE:
+    {
+        if (window)
+        {
+            window->onResize();
+        }
+        break;
+    }
+
     case WM_DESTROY:
         /*  Window has been destroyed, so exit cleanly  */
         if (window)

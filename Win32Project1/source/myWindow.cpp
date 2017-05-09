@@ -40,10 +40,9 @@ void myWindow::create(char appName[], char className[], RECT r)
     SetClassLongPtr(m_hwnd, GCLP_HBRBACKGROUND, (LONG)brush);
 
     // store size of client rect along with width and height
-    RECT clientRect;
-    GetClientRect(m_hwnd, &clientRect);
-    int width = clientRect.right - clientRect.left;
-    int height = clientRect.bottom - clientRect.top;
+    GetClientRect(m_hwnd, &m_clientRect);
+    m_width = m_clientRect.right - m_clientRect.left;
+    m_height = m_clientRect.bottom - m_clientRect.top;
 
     m_textBox1 = CreateWindowEx(
         NULL,
@@ -51,7 +50,7 @@ void myWindow::create(char appName[], char className[], RECT r)
         "",
         WS_CHILD | WS_VISIBLE,
         20, 20,
-        width - 40, height / 2 - 40,
+        m_width - 40, m_height / 2 - 40,
         m_hwnd, NULL,
         m_wndclass.hInstance,
         (LPVOID)this);
@@ -64,9 +63,9 @@ void myWindow::create(char appName[], char className[], RECT r)
         "SEND TO THE NIGERIAN PRINCE",      // Button text 
         WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles 
         20,         // x position 
-        height / 2 + 20,         // y position 
-        width - 40,        // Button width
-        height / 2 - 80,        // Button height
+        m_height / 2 + 20,         // y position 
+        m_width - 40,        // Button width
+        m_height / 2 - 80,        // Button height
         m_hwnd,     // Parent window
         NULL,       // menu.
         m_wndclass.hInstance,
@@ -77,8 +76,8 @@ void myWindow::create(char appName[], char className[], RECT r)
         PROGRESS_CLASS,
         "LOADING",
         WS_VISIBLE | WS_CHILD,
-        20, clientRect.bottom - 40,
-        width - 40, 20,
+        20, m_clientRect.bottom - 40,
+        m_width - 40, 20,
         m_hwnd,
         NULL,
         m_wndclass.hInstance,
@@ -118,4 +117,14 @@ void myWindow::onLeftClickButton(HWND buttonID)
             SendMessage(m_loadBar1, PBM_DELTAPOS, 100, 0);
         }
     }
+}
+
+void myWindow::onResize()
+{
+    GetClientRect(m_hwnd, &m_clientRect);
+    m_width = m_clientRect.right - m_clientRect.left;
+    m_height = m_clientRect.bottom - m_clientRect.top;
+    SetWindowPos(m_textBox1, NULL, 20, 20, m_width - 40, m_height / 2 - 40, SWP_NOZORDER);
+    SetWindowPos(m_button1, NULL, 20, m_height / 2 + 20, m_width - 40, m_height / 2 - 80, SWP_NOZORDER);
+    SetWindowPos(m_loadBar1, NULL, 20, m_clientRect.bottom - 40, m_width - 40, 20, SWP_NOZORDER);
 }
