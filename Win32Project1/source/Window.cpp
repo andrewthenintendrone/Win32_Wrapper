@@ -57,9 +57,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                     window->onLeftClickButton((HWND)lParam);
                 }
                 // the enter key was pressed
-                else if (wParam = VK_RETURN || IDOK)
+                else if (wParam == VK_RETURN)
                 {
                     window->onPressEnter();
+                }
+                else if (wParam == VK_ESCAPE)
+                {
+                    window->onDestroy();
                 }
             }
             break;

@@ -131,5 +131,10 @@ void myWindow::onResize()
 
 void myWindow::onPressEnter()
 {
-
+    if (MessageBox(m_hwnd, "ARE YOU SURE YOU WANT TO SEND MONEY TO THE NIGERIAN PRINCE?", "CRITICAL WARNING!", MB_YESNO | MB_ICONSTOP | MB_DEFBUTTON2) == IDYES)
+    {
+        Edit_SetText(m_textBox1, (LPSTR)"");
+        SendMessage(m_button1, WM_SETTEXT, 0, (LPARAM)(LPSTR)"YOU ARE AN IDIOT");
+        SendMessage(m_loadBar1, PBM_DELTAPOS, 100, 0);
+    }
 }
