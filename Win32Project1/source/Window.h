@@ -11,17 +11,15 @@
 class Window
 {
     public:
-        Window() {};
-        virtual ~Window() = 0 {};
 
-        void create(char appName[], char className[], RECT r);
+        virtual void create(char appName[], char className[], RECT r) = 0;
         void show();
         void run();
         void destroy();
 
         virtual void onCreate() {};
-        virtual void onDestroy() {};
         virtual void onPaint() {};
+        virtual void onDestroy() {};
         virtual void onLeftMouseButtonDown(int xPos, int yPos) {};
         virtual void onLeftClickButton(HWND buttonID) {};
         virtual void onResize() {};
@@ -30,6 +28,9 @@ class Window
         HWND getHWND();
 
     protected:
+        Window() {};
+        virtual ~Window() = 0 {};
+
         HWND m_hwnd;
         WNDCLASSEX  m_wndclass;
     private:

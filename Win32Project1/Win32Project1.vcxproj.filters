@@ -26,9 +26,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="manifest.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="source\Window.h">
       <Filter>Source Files</Filter>
     </ClInclude>

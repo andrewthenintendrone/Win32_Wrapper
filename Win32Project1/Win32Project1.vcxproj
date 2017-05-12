@@ -152,9 +152,6 @@
     <ClCompile Include="source\WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="manifest.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="source\myWindow.h" />
     <ClInclude Include="source\Window.h" />
   </ItemGroup>
