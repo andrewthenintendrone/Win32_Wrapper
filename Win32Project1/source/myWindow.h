@@ -6,7 +6,7 @@ class myWindow : public Window
 public:
     myWindow() {};
     ~myWindow() {};
-
+    
     void create(char appName[], char className[], RECT r);
 
     virtual void onCreate();

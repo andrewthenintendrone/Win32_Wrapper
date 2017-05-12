@@ -4,81 +4,88 @@
 /*  Window procedure  */
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
-    Window* window = (Window*)GetWindowLong(hwnd, 0);
+    myWindow* window = (myWindow*)GetWindowLong(hwnd, 0);
 
     /*  Switch according to what type of message we have received  */
     switch (iMsg)
     {
-    case WM_NCCREATE:
-    {
-        CREATESTRUCT* cs = (CREATESTRUCT*)lParam;
-        SetWindowLong(hwnd, 0, (LONG)cs->lpCreateParams);
-        break;
-    }
+        /*  WM_CREATE is the first message recieved from windows  */
+        case WM_NCCREATE:
+        {
+            CREATESTRUCT* cs = (CREATESTRUCT*)lParam;
+            SetWindowLong(hwnd, 0, (LONG)cs->lpCreateParams);
+            break;
+        }
 
-    case WM_PAINT:
-    {
+        case WM_CREATE:
+        {
+            if (window)
+            {
+                window->onCreate();
+            }
+            break;
+        }
+
         /*  We receive WM_PAINT every time window is updated  */
-        if (window)
+        case WM_PAINT:
         {
-            window->onPaint();
-        }
-        break;
-    }
-
-    case WM_LBUTTONDOWN:
-    {
-        if (window)
-        {
-            window->onLeftMouseButtonDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-        }
-        break;
-    }
-
-    case WM_COMMAND:
-    {
-        if (window)
-        {
-            // left click
-            if (((HWND)lParam) && (HIWORD(wParam) == BN_CLICKED))
+            if (window)
             {
-                window->onLeftClickButton((HWND)lParam);
+                window->onPaint();
             }
-            // pressed enter
-            else if (wParam = VK_RETURN || IDOK)
+            break;
+        }
+
+        /*  WM_LBUTTONDOWN is recieved when the left mouse button is pressed  */
+        case WM_LBUTTONDOWN:
+        {
+            if (window)
             {
-                window->onPressEnter();
+                window->onLeftMouseButtonDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
             }
+            break;
         }
-        break;
-    }
 
-    case WM_SIZE:
-    {
-        if (window)
+        /*  WM_COMMAND is recieved whenever the user interacts with the window  */
+        case WM_COMMAND:
         {
-            window->onResize();
+            if (window)
+            {
+                // a button has been clicked
+                if (((HWND)lParam) && (HIWORD(wParam) == BN_CLICKED))
+                {
+                    window->onLeftClickButton((HWND)lParam);
+                }
+                // the enter key was pressed
+                else if (wParam = VK_RETURN || IDOK)
+                {
+                    window->onPressEnter();
+                }
+            }
+            break;
         }
-        break;
-    }
 
-    case WM_DESTROY:
-        /*  Window has been destroyed, so exit cleanly  */
-        if (window)
+        /*  WM_SIZE is recieved whenever the window is resized  */
+        case WM_SIZE:
         {
-            window->destroy();
+            if (window)
+            {
+                window->onResize();
+            }
+            break;
         }
-        return 0;
-    }
 
+        case WM_DESTROY:
+        {
+            if (window)
+            {
+                window->destroy();
+            }
+            return 0;
+        }
+    }
     /*  Send any messages we don't handle to default window procedure  */
     return DefWindowProc(hwnd, iMsg, wParam, lParam);
-}
-
-/*  Not used in base Window class  */
-void Window::create(char appName[], char className[], RECT r)
-{
-
 }
 
 /*  Show and update our window  */
@@ -93,17 +100,35 @@ void Window::run()
 {
     MSG msg;
     ZeroMemory(&msg, sizeof(msg));
-    while (msg.message != WM_QUIT) {
-        if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE)) {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
+    while (msg.message != WM_QUIT)
+    {
+        if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
+        {
+            if (msg.message == WM_KEYDOWN && msg.wParam == VK_RETURN)
+            {
+                onPressEnter();
+            }
+            else if (msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE)
+            {
+                destroy();
+            }
+            else
+            {
+                TranslateMessage(&msg);
+                DispatchMessage(&msg);
+            }
         }
     }
 }
 
 void Window::destroy()
 {
-    PostQuitMessage(0);
+    // are you sure? etc.
+    if (true)
+    {
+        PostQuitMessage(0);
+        return;
+    }
 }
 
 HWND Window::getHWND()
