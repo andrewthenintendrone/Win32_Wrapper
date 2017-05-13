@@ -98,18 +98,21 @@ void Window::run()
     ZeroMemory(&msg, sizeof(msg));
     while (msg.message != WM_QUIT)
     {
-        if (msg.message == WM_KEYDOWN && msg.wParam == VK_RETURN)
+        if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
         {
-            onPressEnter();
-        }
-        else if (msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE)
-        {
-            onClose();
-        }
-        else
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
+            if (msg.message == WM_KEYDOWN && msg.wParam == VK_RETURN)
+            {
+                onPressEnter();
+            }
+            else if (msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE)
+            {
+                onClose();
+            }
+            else
+            {
+                TranslateMessage(&msg);
+                DispatchMessage(&msg);
+            }
         }
     }
 }
