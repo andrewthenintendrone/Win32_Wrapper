@@ -4,7 +4,7 @@
 /*  Window procedure  */
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
-    myWindow* window = (myWindow*)GetWindowLong(hwnd, 0);
+    myWindow* window = reinterpret_cast<myWindow*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 
     /*  Switch according to what type of message we have received  */
     switch (iMsg)
@@ -12,8 +12,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
         /*  WM_CREATE is the first message recieved from windows  */
         case WM_NCCREATE:
         {
-            CREATESTRUCT* cs = (CREATESTRUCT*)lParam;
-            SetWindowLong(hwnd, 0, (LONG)cs->lpCreateParams);
+            LPCREATESTRUCT lpcs = reinterpret_cast<LPCREATESTRUCT>(lParam);
+            window = static_cast<myWindow*>(lpcs->lpCreateParams);
+            SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(window));
             break;
         }
 
