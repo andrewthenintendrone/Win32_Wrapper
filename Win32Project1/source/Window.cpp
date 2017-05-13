@@ -72,7 +72,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                 }
                 else if (wParam == VK_ESCAPE)
                 {
-                    window->tryClose();
+                    window->onClose();
                 }
             }
             break;
@@ -92,7 +92,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
         {
             if (window)
             {
-                window->tryClose();
+                window->onClose();
             }
             break;
         }
@@ -123,7 +123,7 @@ void Window::run()
     }
 }
 
-void Window::tryClose()
+void Window::onClose()
 {
     // are you sure? etc.
     /*if (MessageBox(m_hwnd, "Save changes to untitled?", "Save?", MB_YESNOCANCEL | MB_ICONEXCLAMATION | MB_DEFBUTTON1) != IDCANCEL)

@@ -14,7 +14,6 @@ class Window
         virtual void create(char appName[], char className[], RECT r) = 0 {};
         void show();
         void run();
-        void tryClose();
 
         virtual void onCreate() {};
         virtual void onPaint() {};
@@ -22,6 +21,7 @@ class Window
         virtual void onLeftClickButton(HWND buttonID) {};
         virtual void onResize() {};
         virtual void onPressEnter() {};
+        virtual void onClose();
 
         HWND getHWND();
 
