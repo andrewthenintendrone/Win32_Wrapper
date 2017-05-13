@@ -14,7 +14,7 @@ class Window
         virtual void create(char appName[], char className[], RECT r) = 0 {};
         void show();
         void run();
-        void destroy();
+        void tryClose();
 
         HWND getHWND();
 
@@ -23,7 +23,6 @@ class Window
         virtual ~Window() = 0 {};
 
         virtual void onCreate() {};
-        virtual void onDestroy() {};
         virtual void onPaint() {};
         virtual void onLeftMouseButtonDown(int xPos, int yPos) {};
         virtual void onLeftClickButton(HWND buttonID) {};

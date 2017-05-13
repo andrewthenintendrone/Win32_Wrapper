@@ -56,14 +56,22 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                 {
                     window->onLeftClickButton((HWND)lParam);
                 }
+            }
+            break;
+        }
+
+        case WM_KEYDOWN:
+        {
+            if (window)
+            {
                 // the enter key was pressed
-                else if (wParam == VK_RETURN)
+                if (wParam == VK_RETURN)
                 {
                     window->onPressEnter();
                 }
                 else if (wParam == VK_ESCAPE)
                 {
-                    window->onDestroy();
+                    window->tryClose();
                 }
             }
             break;
@@ -79,11 +87,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
             break;
         }
 
-        case WM_DESTROY:
+        case WM_CLOSE:
         {
             if (window)
             {
-                window->destroy();
+                window->tryClose();
             }
             return 0;
         }
@@ -108,31 +116,20 @@ void Window::run()
     {
         if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
         {
-            if (msg.message == WM_KEYDOWN && msg.wParam == VK_RETURN)
-            {
-                onPressEnter();
-            }
-            else if (msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE)
-            {
-                destroy();
-            }
-            else
-            {
-                TranslateMessage(&msg);
-                DispatchMessage(&msg);
-            }
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
         }
     }
 }
 
-void Window::destroy()
+void Window::tryClose()
 {
     // are you sure? etc.
-    if (true)
-    {
+    /*if (MessageBox(m_hwnd, "Save changes to untitled?", "Save?", MB_YESNOCANCEL | MB_ICONEXCLAMATION | MB_DEFBUTTON1) != IDCANCEL)
+    {*/
         PostQuitMessage(0);
         return;
-    }
+    //}
 }
 
 HWND Window::getHWND()
