@@ -91,11 +91,6 @@ void myWindow::onCreate()
 
 }
 
-void myWindow::onDestroy()
-{
-
-}
-
 void myWindow::onPaint()
 {
 
