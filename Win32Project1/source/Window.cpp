@@ -4,7 +4,7 @@
 /*  Window procedure  */
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
-    myWindow* window = reinterpret_cast<myWindow*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+    Window* window = reinterpret_cast<Window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 
     /*  Switch according to what type of message we have received  */
     switch (iMsg)
@@ -13,7 +13,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
         case WM_NCCREATE:
         {
             LPCREATESTRUCT lpcs = reinterpret_cast<LPCREATESTRUCT>(lParam);
-            window = static_cast<myWindow*>(lpcs->lpCreateParams);
+            window = static_cast<Window*>(lpcs->lpCreateParams);
             SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(window));
             break;
         }
@@ -94,7 +94,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
             {
                 window->tryClose();
             }
-            return 0;
+            break;
         }
     }
     /*  Send any messages we don't handle to default window procedure  */

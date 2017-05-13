@@ -16,18 +16,18 @@ class Window
         void run();
         void tryClose();
 
-        HWND getHWND();
-
-    protected:
-        Window() {};
-        virtual ~Window() = 0 {};
-
         virtual void onCreate() {};
         virtual void onPaint() {};
         virtual void onLeftMouseButtonDown(int xPos, int yPos) {};
         virtual void onLeftClickButton(HWND buttonID) {};
         virtual void onResize() {};
         virtual void onPressEnter() {};
+
+        HWND getHWND();
+
+    protected:
+        Window() {};
+        virtual ~Window() = 0 {};
 
         HWND m_hwnd;
         WNDCLASSEX  m_wndclass;

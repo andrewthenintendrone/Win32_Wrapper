@@ -9,6 +9,7 @@ public:
     
     void create(char appName[], char className[], RECT r);
 
+protected:
     virtual void onCreate();
     virtual void onDestroy();
     virtual void onPaint();
@@ -16,8 +17,6 @@ public:
     virtual void onLeftClickButton(HWND buttonID);
     virtual void onResize();
     virtual void onPressEnter();
-
-protected:
 private:
     HWND m_textBox1;
     HWND m_button1;
