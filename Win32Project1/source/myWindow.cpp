@@ -133,3 +133,8 @@ void myWindow::onPressEnter()
         SendMessage(m_loadBar1, PBM_DELTAPOS, 100, 0);
     }
 }
+
+void myWindow::onClose()
+{
+    PostQuitMessage(0);
+}

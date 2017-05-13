@@ -16,6 +16,7 @@ protected:
     virtual void onLeftClickButton(HWND buttonID);
     virtual void onResize();
     virtual void onPressEnter();
+    virtual void onClose();
 private:
     HWND m_textBox1;
     HWND m_button1;
