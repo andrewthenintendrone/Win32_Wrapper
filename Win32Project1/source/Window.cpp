@@ -61,23 +61,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
             break;
         }
 
-        case WM_KEYDOWN:
-        {
-            if (window)
-            {
-                // the enter key was pressed
-                if (wParam == VK_RETURN)
-                {
-                    window->onPressEnter();
-                }
-                else if (wParam == VK_ESCAPE)
-                {
-                    window->onClose();
-                }
-            }
-            break;
-        }
-
         /*  WM_SIZE is recieved whenever the window is resized  */
         case WM_SIZE:
         {
@@ -115,7 +98,15 @@ void Window::run()
     ZeroMemory(&msg, sizeof(msg));
     while (msg.message != WM_QUIT)
     {
-        if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
+        if (msg.message == WM_KEYDOWN && msg.wParam == VK_RETURN)
+        {
+            onPressEnter();
+        }
+        else if (msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE)
+        {
+            onClose();
+        }
+        else
         {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
