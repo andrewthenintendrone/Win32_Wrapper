@@ -103,17 +103,14 @@ void myWindow::onPaint()
     PAINTSTRUCT ps;
 
     Image* image = new Image(L"test.jpg");
-    int picWidth = image->GetWidth();
-    int picHeight = image->GetHeight();
+    m_picWidth = image->GetWidth();
+    m_picHeight = image->GetHeight();
 
     HDC hdc = BeginPaint(m_hwnd, &ps);
 
     // Create an off-screen DC for double-buffering
-    if (m_hdcMem && m_hbmMem)
-    {
-        m_hdcMem = CreateCompatibleDC(hdc);
-        m_hbmMem = CreateCompatibleBitmap(hdc, picWidth, picHeight);
-    }
+    m_hdcMem = CreateCompatibleDC(hdc);
+    m_hbmMem = CreateCompatibleBitmap(hdc, m_picWidth, m_picHeight);
 
     HANDLE hOld = SelectObject(m_hdcMem, m_hbmMem);
 
@@ -126,7 +123,7 @@ void myWindow::onPaint()
     SetBrushOrgEx(m_hdcMem, 0, 0, NULL);
 
     // Transfer the off-screen DC to the screen
-    StretchBlt(hdc, 0, 0, m_width, m_height, m_hdcMem, 0, 0, picWidth, picHeight, SRCCOPY);
+    StretchBlt(hdc, 0, 0, m_width, m_height, m_hdcMem, 0, 0, m_picWidth, m_picHeight, SRCCOPY);
 
     // Free-up the off-screen DC
     SelectObject(m_hdcMem, hOld);
@@ -134,7 +131,6 @@ void myWindow::onPaint()
     DeleteDC(m_hdcMem);
 
     delete image;
-
     EndPaint(m_hwnd, &ps);
 }
 

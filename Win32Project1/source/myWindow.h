@@ -29,10 +29,12 @@ namespace win32Wrapper
         int m_width;
         int m_height;
 
+        int m_picWidth;
+        int m_picHeight;
+
         HDC m_hdcMem;
         HBITMAP m_hbmMem;
 
         ULONG_PTR m_GDItoken;
-        HBITMAP m_picture;
     };
 }
