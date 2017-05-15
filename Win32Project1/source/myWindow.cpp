@@ -1,7 +1,6 @@
 #include "myWindow.h"
 
 using namespace win32Wrapper;
-using namespace Gdiplus;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
 
@@ -86,52 +85,49 @@ void myWindow::create(char appName[], char className[], RECT r)
     //    m_wndclass.hInstance,
     //    (LPVOID)this);
 
-    // start up GDI+ -- only need to do this once per process at startup
-    GdiplusStartupInput gdiplusStartupInput;
-    GdiplusStartup(&m_GDItoken, &gdiplusStartupInput, NULL);
-
     //SendMessage(m_loadBar1, PBM_SETPOS, 100, 0);
 }
 
 void myWindow::onCreate()
 {
-
+    m_image = new Gdiplus::Image(L"test.jpg");
+    m_picWidth = m_image->GetWidth();
+    m_picHeight = m_image->GetHeight();
 }
 
-void myWindow::onPaint()
+void myWindow::onPaint(HDC hdc)
 {
-    PAINTSTRUCT ps;
 
-    Image* image = new Image(L"test.jpg");
-    m_picWidth = image->GetWidth();
-    m_picHeight = image->GetHeight();
+    //// Create an off-screen DC for double-buffering
+    //m_hdcMem = CreateCompatibleDC(hdc);
+    //m_hbmMem = CreateCompatibleBitmap(hdc, m_picWidth, m_picHeight);
 
-    HDC hdc = BeginPaint(m_hwnd, &ps);
+    //HANDLE hOld = SelectObject(m_hdcMem, m_hbmMem);
 
-    // Create an off-screen DC for double-buffering
-    m_hdcMem = CreateCompatibleDC(hdc);
-    m_hbmMem = CreateCompatibleBitmap(hdc, m_picWidth, m_picHeight);
 
-    HANDLE hOld = SelectObject(m_hdcMem, m_hbmMem);
+
+
+
+
 
     // Draw into hdcMem here
 
-    Graphics grpx(m_hdcMem);
-    grpx.DrawImage(image, 0, 0);
+    Gdiplus::Graphics grpx(hdc);
+    grpx.DrawImage(m_image, 0, 0);
 
     SetStretchBltMode(hdc, HALFTONE);
-    SetBrushOrgEx(m_hdcMem, 0, 0, NULL);
+    SetBrushOrgEx(hdc, 0, 0, NULL);
 
-    // Transfer the off-screen DC to the screen
-    StretchBlt(hdc, 0, 0, m_width, m_height, m_hdcMem, 0, 0, m_picWidth, m_picHeight, SRCCOPY);
+    GetClientRect(m_hwnd, &m_clientRect);
+    int width = m_clientRect.right - m_clientRect.left;
+    int height = m_clientRect.bottom - m_clientRect.top;
+
 
     // Free-up the off-screen DC
-    SelectObject(m_hdcMem, hOld);
-    DeleteObject(m_hbmMem);
-    DeleteDC(m_hdcMem);
+//    SelectObject(m_hdcMem, hOld);
+//    DeleteObject(m_hbmMem);
+//    DeleteDC(m_hdcMem);
 
-    delete image;
-    EndPaint(m_hwnd, &ps);
 }
 
 void myWindow::onLeftMouseButtonDown(int xPos, int yPos)
@@ -157,9 +153,9 @@ void myWindow::onResize()
     GetClientRect(m_hwnd, &m_clientRect);
     m_width = m_clientRect.right - m_clientRect.left;
     m_height = m_clientRect.bottom - m_clientRect.top;
-    SetWindowPos(m_textBox1, NULL, 20, 20, m_width - 40, m_height / 2 - 40, SWP_NOZORDER);
+    /*SetWindowPos(m_textBox1, NULL, 20, 20, m_width - 40, m_height / 2 - 40, SWP_NOZORDER);
     SetWindowPos(m_button1, NULL, 20, m_height / 2 + 20, m_width - 40, m_height / 2 - 80, SWP_NOZORDER);
-    SetWindowPos(m_loadBar1, NULL, 20, m_clientRect.bottom - 40, m_width - 40, 20, SWP_NOZORDER);
+    SetWindowPos(m_loadBar1, NULL, 20, m_clientRect.bottom - 40, m_width - 40, 20, SWP_NOZORDER);*/
 }
 
 void myWindow::onPressEnter()
@@ -174,6 +170,6 @@ void myWindow::onPressEnter()
 
 void myWindow::onClose()
 {
-    GdiplusShutdown(m_GDItoken);
+    // delete m_image;
     PostQuitMessage(0);
 }

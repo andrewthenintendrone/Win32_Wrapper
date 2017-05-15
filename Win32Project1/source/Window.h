@@ -18,7 +18,7 @@ namespace win32Wrapper
         void run();
 
         virtual void onCreate() {};
-        virtual void onPaint() {};
+        virtual void onPaint(HDC hdc) {};
         virtual void onLeftMouseButtonDown(int xPos, int yPos) {};
         virtual void onLeftClickButton(HWND buttonID) {};
         virtual void onResize() {};
@@ -28,11 +28,17 @@ namespace win32Wrapper
         HWND getHWND();
 
     protected:
-        Window() {};
+        Window() : m_hdcMem(NULL), m_hbmMem(NULL) {};
         virtual ~Window() = 0 {};
 
         HWND m_hwnd;
         WNDCLASSEX  m_wndclass;
+
     private:
+
+        friend LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
+        HDC m_hdcMem;
+        HBITMAP m_hbmMem;
+
     };
 }

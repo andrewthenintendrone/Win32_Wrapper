@@ -8,14 +8,14 @@ namespace win32Wrapper
     class myWindow : public Window
     {
     public:
-        myWindow() {};
+        myWindow() { m_image = nullptr; };
         ~myWindow() {};
 
         void create(char appName[], char className[], RECT r);
 
     protected:
         virtual void onCreate();
-        virtual void onPaint();
+        virtual void onPaint(HDC hdc);
         virtual void onLeftMouseButtonDown(int xPos, int yPos);
         virtual void onLeftClickButton(HWND buttonID);
         virtual void onResize();
@@ -32,9 +32,8 @@ namespace win32Wrapper
         int m_picWidth;
         int m_picHeight;
 
-        HDC m_hdcMem;
-        HBITMAP m_hbmMem;
+        Gdiplus::Image* m_image;
 
-        ULONG_PTR m_GDItoken;
+
     };
 }
