@@ -39,6 +39,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
             break;
         }
 
+
+        case WM_ERASEBKGND:
+        {
+            return 1;
+        }
+
         /*  WM_LBUTTONDOWN is recieved when the left mouse button is pressed  */
         case WM_LBUTTONDOWN:
         {

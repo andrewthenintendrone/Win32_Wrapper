@@ -1,6 +1,7 @@
 #include "myWindow.h"
 
 using namespace win32Wrapper;
+using namespace Gdiplus;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
 
@@ -46,44 +47,48 @@ void myWindow::create(char appName[], char className[], RECT r)
     m_width = m_clientRect.right - m_clientRect.left;
     m_height = m_clientRect.bottom - m_clientRect.top;
 
-    m_textBox1 = CreateWindowEx(
-        NULL,
-        "EDIT",
-        "",
-        WS_CHILD | WS_VISIBLE,
-        20, 20,
-        m_width - 40, m_height / 2 - 40,
-        m_hwnd, NULL,
-        m_wndclass.hInstance,
-        (LPVOID)this);
+    //m_textBox1 = CreateWindowEx(
+    //    NULL,
+    //    "EDIT",
+    //    "",
+    //    WS_CHILD | WS_VISIBLE,
+    //    20, 20,
+    //    m_width - 40, m_height / 2 - 40,
+    //    m_hwnd, NULL,
+    //    m_wndclass.hInstance,
+    //    (LPVOID)this);
 
-    Edit_SetCueBannerText(m_textBox1, L"Please enter your credit card information");
+    //Edit_SetCueBannerText(m_textBox1, L"Please enter your credit card information");
 
-    m_button1 = CreateWindowEx(
-        NULL,
-        "BUTTON",  // Predefined class; Unicode assumed 
-        "SEND TO THE NIGERIAN PRINCE",      // Button text 
-        WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles 
-        20,         // x position 
-        m_height / 2 + 20,         // y position 
-        m_width - 40,        // Button width
-        m_height / 2 - 80,        // Button height
-        m_hwnd,     // Parent window
-        NULL,       // menu.
-        m_wndclass.hInstance,
-        (LPVOID)this);      // Pointer not needed.
+    //m_button1 = CreateWindowEx(
+    //    NULL,
+    //    "BUTTON",  // Predefined class; Unicode assumed 
+    //    "SEND TO THE NIGERIAN PRINCE",      // Button text 
+    //    WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles 
+    //    20,         // x position 
+    //    m_height / 2 + 20,         // y position 
+    //    m_width - 40,        // Button width
+    //    m_height / 2 - 80,        // Button height
+    //    m_hwnd,     // Parent window
+    //    NULL,       // menu.
+    //    m_wndclass.hInstance,
+    //    (LPVOID)this);      // Pointer not needed.
 
-    m_loadBar1 = CreateWindowEx(
-        NULL,
-        PROGRESS_CLASS,
-        "LOADING",
-        WS_VISIBLE | WS_CHILD,
-        20, m_clientRect.bottom - 40,
-        m_width - 40, 20,
-        m_hwnd,
-        NULL,
-        m_wndclass.hInstance,
-        (LPVOID)this);
+    //m_loadBar1 = CreateWindowEx(
+    //    NULL,
+    //    PROGRESS_CLASS,
+    //    "LOADING",
+    //    WS_VISIBLE | WS_CHILD,
+    //    20, m_clientRect.bottom - 40,
+    //    m_width - 40, 20,
+    //    m_hwnd,
+    //    NULL,
+    //    m_wndclass.hInstance,
+    //    (LPVOID)this);
+
+    // start up GDI+ -- only need to do this once per process at startup
+    GdiplusStartupInput gdiplusStartupInput;
+    GdiplusStartup(&m_GDItoken, &gdiplusStartupInput, NULL);
 
     //SendMessage(m_loadBar1, PBM_SETPOS, 100, 0);
 }
@@ -95,7 +100,42 @@ void myWindow::onCreate()
 
 void myWindow::onPaint()
 {
+    PAINTSTRUCT ps;
 
+    Image* image = new Image(L"test.jpg");
+    int picWidth = image->GetWidth();
+    int picHeight = image->GetHeight();
+
+    HDC hdc = BeginPaint(m_hwnd, &ps);
+
+    // Create an off-screen DC for double-buffering
+    if (m_hdcMem && m_hbmMem)
+    {
+        m_hdcMem = CreateCompatibleDC(hdc);
+        m_hbmMem = CreateCompatibleBitmap(hdc, picWidth, picHeight);
+    }
+
+    HANDLE hOld = SelectObject(m_hdcMem, m_hbmMem);
+
+    // Draw into hdcMem here
+
+    Graphics grpx(m_hdcMem);
+    grpx.DrawImage(image, 0, 0);
+
+    SetStretchBltMode(hdc, HALFTONE);
+    SetBrushOrgEx(m_hdcMem, 0, 0, NULL);
+
+    // Transfer the off-screen DC to the screen
+    StretchBlt(hdc, 0, 0, m_width, m_height, m_hdcMem, 0, 0, picWidth, picHeight, SRCCOPY);
+
+    // Free-up the off-screen DC
+    SelectObject(m_hdcMem, hOld);
+    DeleteObject(m_hbmMem);
+    DeleteDC(m_hdcMem);
+
+    delete image;
+
+    EndPaint(m_hwnd, &ps);
 }
 
 void myWindow::onLeftMouseButtonDown(int xPos, int yPos)
@@ -138,5 +178,6 @@ void myWindow::onPressEnter()
 
 void myWindow::onClose()
 {
+    GdiplusShutdown(m_GDItoken);
     PostQuitMessage(0);
 }

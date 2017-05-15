@@ -1,5 +1,7 @@
 #pragma once
 #include "Window.h"
+#include <gdiplus.h>
+#include <stdio.h>
 
 namespace win32Wrapper
 {
@@ -26,5 +28,11 @@ namespace win32Wrapper
         RECT m_clientRect;;
         int m_width;
         int m_height;
+
+        HDC m_hdcMem;
+        HBITMAP m_hbmMem;
+
+        ULONG_PTR m_GDItoken;
+        HBITMAP m_picture;
     };
 }
