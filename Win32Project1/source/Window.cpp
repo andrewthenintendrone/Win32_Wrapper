@@ -1,6 +1,8 @@
 #include "Window.h"
 #include "myWindow.h"
 
+using namespace win32Wrapper;
+
 /*  Window procedure  */
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {

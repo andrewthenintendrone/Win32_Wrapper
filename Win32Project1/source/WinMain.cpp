@@ -3,7 +3,7 @@
 /*  WinMain(), our entry point  */
 int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR szCmdLine, int iCmdShow)
 {
-    myWindow w;
+    win32Wrapper::myWindow w;
     w.create("TOTAL LEGIT PROGREM.EXE", "TEST", RECT{ 100, 100, 640, 480 });
     w.show();
     w.run();

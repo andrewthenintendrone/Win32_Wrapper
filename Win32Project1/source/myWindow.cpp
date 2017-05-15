@@ -1,5 +1,7 @@
 #include "myWindow.h"
 
+using namespace win32Wrapper;
+
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
 
 void myWindow::create(char appName[], char className[], RECT r)
