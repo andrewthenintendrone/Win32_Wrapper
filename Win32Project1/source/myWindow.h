@@ -15,7 +15,6 @@ namespace winWrap
 
         void create(LPCTSTR windowTitle);
     protected:
-
         virtual void onCreate();
         virtual void onPaint(HDC hdc);
         virtual void onLeftMouseButtonDown(int xPos, int yPos);
@@ -23,6 +22,7 @@ namespace winWrap
         virtual void onResize();
         virtual void onPressEnter();
         virtual void onClose();
+        virtual void onMouseMove(POINT mousePos);
     private:
         HWND m_textBox1;
         HWND m_button1;

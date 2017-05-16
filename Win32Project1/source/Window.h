@@ -2,7 +2,7 @@
 
 // include windows headers
 #include <Windows.h>
-#include <windowsx.h>
+#include <Windowsx.h>
 #include <gdiplus.h>
 #include <Commctrl.h>
 
@@ -19,6 +19,12 @@ namespace winWrap
         void show();
         void run();
 
+        int getPositionX();
+        int getPositionY();
+
+        int getFullWidth();
+        int getFullHeight();
+
         int getWidth();
         int getHeight();
 
@@ -29,6 +35,7 @@ namespace winWrap
         virtual void onResize() {};
         virtual void onPressEnter() {};
         virtual void onClose();
+        virtual void onMouseMove(POINT mousePos) {};
 
         HWND getHWND();
 

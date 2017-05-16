@@ -91,6 +91,18 @@ LRESULT CALLBACK winWrap::WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lP
             break;
         }
 
+        /*  WM_NCMOUSEMOVE is recieved when the mouse is moving over the window (including the chrome  */
+        case WM_NCMOUSEMOVE:
+        {
+            if (window)
+            {
+                POINT mousePos;
+                GetCursorPos(&mousePos);
+                window->onMouseMove(mousePos);
+            }
+            return 0;
+        }
+
         /*  WM_SIZE is recieved whenever the window is resized  */
         case WM_SIZE:
         {
@@ -130,13 +142,29 @@ LRESULT CALLBACK winWrap::WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lP
 // moves the window to the specified x and y positions
 void winWrap::Window::moveTo(int newX, int newY)
 {
-    SetWindowPos(m_hwnd, HWND_TOP, newX, newY, getWidth(), getHeight(), SWP_NOZORDER);
+    SetWindowPos(m_hwnd, HWND_TOP, newX, newY, getFullWidth(), getFullHeight(), SWP_NOZORDER);
 }
 
 // resizes the window to the specified width and height
 void winWrap::Window::scaleTo(int width, int height)
 {
     SetWindowPos(m_hwnd, HWND_TOP, 0, 0, width, height, SWP_NOMOVE);
+}
+
+// returns the width of the entire window (including the chrome) in pixels
+int winWrap::Window::getFullWidth()
+{
+    RECT rect;
+    GetWindowRect(m_hwnd, &rect);
+    return (rect.right - rect.left);
+}
+
+// returns the height of the entire window (including the chrome) in pixels
+int winWrap::Window::getFullHeight()
+{
+    RECT rect;
+    GetWindowRect(m_hwnd, &rect);
+    return (rect.bottom - rect.top);
 }
 
 // returns the width of the client rect in pixels
@@ -153,6 +181,22 @@ int winWrap::Window::getHeight()
     RECT rect;
     GetClientRect(m_hwnd, &rect);
     return (rect.bottom - rect.top);
+}
+
+// returns the X position of the top-left corner of the window
+int winWrap::Window::getPositionX()
+{
+    RECT rect;
+    GetWindowRect(m_hwnd, &rect);
+    return (rect.left);
+}
+
+// returns the Y position of the top-left corner of the window
+int winWrap::Window::getPositionY()
+{
+    RECT rect;
+    GetWindowRect(m_hwnd, &rect);
+    return (rect.top);
 }
 
 /*  Show and update our window  */
