@@ -25,15 +25,10 @@ namespace win32Wrapper
         HWND m_textBox1;
         HWND m_button1;
         HWND m_loadBar1;
-        RECT m_clientRect;;
+        RECT m_clientRect;
         int m_width;
         int m_height;
 
-        int m_picWidth;
-        int m_picHeight;
-
         Gdiplus::Image* m_image;
-
-
     };
 }

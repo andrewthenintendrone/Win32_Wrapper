@@ -20,6 +20,16 @@ namespace win32Wrapper
             LPCREATESTRUCT lpcs = reinterpret_cast<LPCREATESTRUCT>(lParam);
             window = static_cast<Window*>(lpcs->lpCreateParams);
             SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(window));
+
+            // Create an off-screen DC for double-buffering
+            HDC hdc = GetDC(hwnd);
+            window->m_hdcMem = CreateCompatibleDC(hdc);
+            int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+            int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+            window->m_hbmMem = CreateCompatibleBitmap(hdc, screenWidth * 2, screenHeight);
+            SelectObject(window->m_hdcMem, window->m_hbmMem);
+            ReleaseDC(hwnd, hdc);
+
             break;
         }
 
@@ -37,16 +47,20 @@ namespace win32Wrapper
         {
             if (window)
             {
+                window->onPaint(window->m_hdcMem);
+
                 PAINTSTRUCT ps;
                 HDC hdc = BeginPaint(hwnd, &ps);
 
-                window->onPaint(window->m_hdcMem);
-
-                EndPaint(hwnd, &ps);
+                RECT clientRect;
+                GetClientRect(hwnd, &clientRect);
+                int winWidth = clientRect.right - clientRect.left;
+                int winHeight = clientRect.bottom - clientRect.top;
 
                 // Transfer the off-screen DC to the screen
-                StretchBlt(hdc, 0, 0, width, height, hdc, 0, 0, m_picWidth, m_picHeight, SRCCOPY);
+                BitBlt(hdc, 0, 0, winWidth, winHeight, window->m_hdcMem, 0, 0, SRCCOPY);
 
+                EndPaint(hwnd, &ps);
             }
             break;
         }
@@ -99,6 +113,17 @@ namespace win32Wrapper
             }
             break;
         }
+
+        case WM_DESTROY:
+            if (window)
+            {
+                // Free-up the off-screen DC
+                DeleteObject(window->m_hbmMem);
+                DeleteDC(window->m_hdcMem);
+            }
+
+            break;
+
         }
         /*  Send any messages we don't handle to default window procedure  */
         return DefWindowProc(hwnd, iMsg, wParam, lParam);

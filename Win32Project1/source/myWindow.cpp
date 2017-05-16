@@ -97,37 +97,18 @@ void myWindow::onCreate()
 
 void myWindow::onPaint(HDC hdc)
 {
-
-    //// Create an off-screen DC for double-buffering
-    //m_hdcMem = CreateCompatibleDC(hdc);
-    //m_hbmMem = CreateCompatibleBitmap(hdc, m_picWidth, m_picHeight);
-
-    //HANDLE hOld = SelectObject(m_hdcMem, m_hbmMem);
-
-
-
-
-
-
-
     // Draw into hdcMem here
 
+    GetClientRect(m_hwnd, &m_clientRect);
+    m_width = m_clientRect.right - m_clientRect.left;
+    m_height = m_clientRect.bottom - m_clientRect.top;
+    Gdiplus::Rect clientRect(m_clientRect.left, m_clientRect.top, m_width, m_height);
+
     Gdiplus::Graphics grpx(hdc);
-    grpx.DrawImage(m_image, 0, 0);
+    grpx.DrawImage(m_image, clientRect);
 
     SetStretchBltMode(hdc, HALFTONE);
     SetBrushOrgEx(hdc, 0, 0, NULL);
-
-    GetClientRect(m_hwnd, &m_clientRect);
-    int width = m_clientRect.right - m_clientRect.left;
-    int height = m_clientRect.bottom - m_clientRect.top;
-
-
-    // Free-up the off-screen DC
-//    SelectObject(m_hdcMem, hOld);
-//    DeleteObject(m_hbmMem);
-//    DeleteDC(m_hdcMem);
-
 }
 
 void myWindow::onLeftMouseButtonDown(int xPos, int yPos)
@@ -150,9 +131,9 @@ void myWindow::onLeftClickButton(HWND buttonID)
 
 void myWindow::onResize()
 {
-    GetClientRect(m_hwnd, &m_clientRect);
-    m_width = m_clientRect.right - m_clientRect.left;
-    m_height = m_clientRect.bottom - m_clientRect.top;
+    //GetClientRect(m_hwnd, &m_clientRect);
+    //m_width = m_clientRect.right - m_clientRect.left;
+    //m_height = m_clientRect.bottom - m_clientRect.top;
     /*SetWindowPos(m_textBox1, NULL, 20, 20, m_width - 40, m_height / 2 - 40, SWP_NOZORDER);
     SetWindowPos(m_button1, NULL, 20, m_height / 2 + 20, m_width - 40, m_height / 2 - 80, SWP_NOZORDER);
     SetWindowPos(m_loadBar1, NULL, 20, m_clientRect.bottom - 40, m_width - 40, 20, SWP_NOZORDER);*/

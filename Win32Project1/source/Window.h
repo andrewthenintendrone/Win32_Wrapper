@@ -33,12 +33,12 @@ namespace win32Wrapper
 
         HWND m_hwnd;
         WNDCLASSEX  m_wndclass;
+        int m_picWidth;
+        int m_picHeight;
 
     private:
-
         friend LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
         HDC m_hdcMem;
         HBITMAP m_hbmMem;
-
     };
 }
