@@ -9,7 +9,7 @@ int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR szCmdLine, in
     Gdiplus::GdiplusStartupInput gdiplusStartupInput;
     Gdiplus::GdiplusStartup(&GDItoken, &gdiplusStartupInput, NULL);
 
-    win32Wrapper::myWindow w;
+    winWrap::myWindow w;
     w.create("Pokemon", "TEST", RECT{ 100, 100, 512, 512 });
     w.show();
     w.run();

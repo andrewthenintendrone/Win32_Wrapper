@@ -3,12 +3,13 @@
 // include windows headers
 #include <Windows.h>
 #include <windowsx.h>
+#include <gdiplus.h>
 #include <Commctrl.h>
 
 // enable fancy windows 7 buttons
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
-namespace win32Wrapper
+namespace winWrap
 {
     class Window
     {
@@ -30,6 +31,8 @@ namespace win32Wrapper
     protected:
         Window() : m_hdcMem(NULL), m_hbmMem(NULL) {};
         virtual ~Window() = 0 {};
+
+        void drawImage(HWND hwnd, const Gdiplus::Image& image, RECT placement);
 
         HWND m_hwnd;
         WNDCLASSEX  m_wndclass;

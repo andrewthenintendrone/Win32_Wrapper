@@ -1,12 +1,11 @@
 #pragma once
 #include "Window.h"
-#include <gdiplus.h>
 #include <stdio.h>
 #include <time.h>
 #include <vector>
 #include <string>
 
-namespace win32Wrapper
+namespace winWrap
 {
     class myWindow : public Window
     {

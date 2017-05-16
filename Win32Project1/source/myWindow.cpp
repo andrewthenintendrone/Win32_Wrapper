@@ -1,10 +1,8 @@
 #include "myWindow.h"
 
-using namespace win32Wrapper;
-
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
 
-void myWindow::create(char appName[], char className[], RECT r)
+void winWrap::myWindow::create(char appName[], char className[], RECT r)
 {
     HINSTANCE hinst = GetModuleHandle(NULL);
 
@@ -88,7 +86,7 @@ void myWindow::create(char appName[], char className[], RECT r)
     //SendMessage(m_loadBar1, PBM_SETPOS, 100, 0);
 }
 
-void myWindow::onCreate()
+void winWrap::myWindow::onCreate()
 {
     srand((unsigned int)time(NULL));
     m_backgroundBrush = CreateSolidBrush(RGB(30, 30, 30));
@@ -99,7 +97,7 @@ void myWindow::onCreate()
     m_picHeight = m_image->GetHeight();
 }
 
-void myWindow::onPaint(HDC hdc)
+void winWrap::myWindow::onPaint(HDC hdc)
 {
     GetClientRect(m_hwnd, &m_clientRect);
     m_width = m_clientRect.right - m_clientRect.left;
@@ -116,12 +114,12 @@ void myWindow::onPaint(HDC hdc)
     SetBrushOrgEx(hdc, 0, 0, NULL);
 }
 
-void myWindow::onLeftMouseButtonDown(int xPos, int yPos)
+void winWrap::myWindow::onLeftMouseButtonDown(int xPos, int yPos)
 {
 
 }
 
-void myWindow::onLeftClickButton(HWND buttonID)
+void winWrap::myWindow::onLeftClickButton(HWND buttonID)
 {
     if (buttonID == m_button1)
     {
@@ -134,7 +132,7 @@ void myWindow::onLeftClickButton(HWND buttonID)
     }
 }
 
-void myWindow::onResize()
+void winWrap::myWindow::onResize()
 {
     //GetClientRect(m_hwnd, &m_clientRect);
     //m_width = m_clientRect.right - m_clientRect.left;
@@ -144,7 +142,7 @@ void myWindow::onResize()
     SetWindowPos(m_loadBar1, NULL, 20, m_clientRect.bottom - 40, m_width - 40, 20, SWP_NOZORDER);*/
 }
 
-void myWindow::onPressEnter()
+void winWrap::myWindow::onPressEnter()
 {
     /*if (MessageBox(m_hwnd, "ARE YOU SURE YOU WANT TO SEND MONEY TO THE NIGERIAN PRINCE?", "CRITICAL WARNING!", MB_YESNO | MB_ICONSTOP | MB_DEFBUTTON2) == IDYES)
     {
@@ -162,7 +160,7 @@ void myWindow::onPressEnter()
     UpdateWindow(m_hwnd);
 }
 
-void myWindow::onClose()
+void winWrap::myWindow::onClose()
 {
     if (m_image)
     {
