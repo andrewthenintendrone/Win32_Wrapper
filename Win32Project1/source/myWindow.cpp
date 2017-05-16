@@ -90,8 +90,11 @@ void myWindow::create(char appName[], char className[], RECT r)
 
 void myWindow::onCreate()
 {
+    srand((unsigned int)time(NULL));
     m_backgroundBrush = CreateSolidBrush(RGB(30, 30, 30));
-    m_image = new Gdiplus::Image(L"test.jpg");
+    
+    m_pick = (rand() % (pics.size() - 1));
+    m_image = new Gdiplus::Image((L"./img/" + pics[m_pick] + L".png").c_str());
     m_picWidth = m_image->GetWidth();
     m_picHeight = m_image->GetHeight();
 }
@@ -143,16 +146,27 @@ void myWindow::onResize()
 
 void myWindow::onPressEnter()
 {
-    if (MessageBox(m_hwnd, "ARE YOU SURE YOU WANT TO SEND MONEY TO THE NIGERIAN PRINCE?", "CRITICAL WARNING!", MB_YESNO | MB_ICONSTOP | MB_DEFBUTTON2) == IDYES)
+    /*if (MessageBox(m_hwnd, "ARE YOU SURE YOU WANT TO SEND MONEY TO THE NIGERIAN PRINCE?", "CRITICAL WARNING!", MB_YESNO | MB_ICONSTOP | MB_DEFBUTTON2) == IDYES)
     {
         Edit_SetText(m_textBox1, (LPSTR)"");
         SendMessage(m_button1, WM_SETTEXT, 0, (LPARAM)(LPSTR)"YOU ARE AN IDIOT");
         SendMessage(m_loadBar1, PBM_DELTAPOS, 100, 0);
-    }
+    }*/
+    m_pick = (rand() % (pics.size() - 1));
+
+    delete m_image;
+    m_image = new Gdiplus::Image((L"./img/" + pics[m_pick] + L".png").c_str());
+    m_picWidth = m_image->GetWidth();
+    m_picHeight = m_image->GetHeight();
+    InvalidateRect(m_hwnd, &m_clientRect, false);
+    UpdateWindow(m_hwnd);
 }
 
 void myWindow::onClose()
 {
-    // delete m_image;
+    if (m_image)
+    {
+        delete m_image;
+    }
     PostQuitMessage(0);
 }
