@@ -12,7 +12,7 @@ int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR szCmdLine, in
     winWrap::myWindow w;
     w.create("pokemon");
     w.moveTo(100, 100);
-    w.scaleTo(1000, 1000);
+    w.scaleTo(512, 512);
     w.show();
     w.run();
 

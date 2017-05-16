@@ -171,12 +171,18 @@ void winWrap::myWindow::onClose()
 
 void winWrap::myWindow::onMouseMove(POINT mousePos)
 {
-    if (mousePos.x > (getPositionX() + getFullWidth() - 60) && mousePos.x < (getPositionX() + getFullWidth()) && mousePos.y > getPositionY() && mousePos.y < getPositionY() + 25)
-    {
-        int xJump = (rand() % 2 == 0 ? (getPositionX() - 50) : (getPositionX() + 50));
-        int yJump = (rand() % 2 == 0 ? (getPositionY() - 50) : (getPositionY() + 50));
+    RECT wRect = getWinRect();
+    //if (mousePos.x > (wRect.right - 60) && mousePos.x < (wRect.right) && mousePos.y > wRect.top && mousePos.y < wRect.top + 25)
+    //{
+        int xJump = (rand() % 2 == 0 ? (wRect.left - 1) : (wRect.left + 1));
+        int yJump = (rand() % 2 == 0 ? (wRect.top - 1) : (wRect.top + 1));
         moveTo(xJump, yJump);
         InvalidateRect(m_hwnd, NULL, false);
         UpdateWindow(m_hwnd);
-    }
+    //}
+}
+
+void winWrap::myWindow::onWindowMove()
+{
+
 }

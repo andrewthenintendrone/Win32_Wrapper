@@ -91,7 +91,7 @@ LRESULT CALLBACK winWrap::WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lP
             break;
         }
 
-        /*  WM_NCMOUSEMOVE is recieved when the mouse is moving over the window (including the chrome  */
+        /*  WM_NCMOUSEMOVE is recieved when the mouse is moving over the chrome  */
         case WM_NCMOUSEMOVE:
         {
             if (window)
@@ -101,6 +101,27 @@ LRESULT CALLBACK winWrap::WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lP
                 window->onMouseMove(mousePos);
             }
             return 0;
+        }
+
+        /*  WM_NCMOUSEMOVE is recieved when the mouse is moving over the window  */
+        case WM_MOUSEMOVE:
+        {
+            if (window)
+            {
+                POINT mousePos;
+                GetCursorPos(&mousePos);
+                window->onMouseMove(mousePos);
+            }
+            return 0;
+        }
+
+        case WM_MOVE:
+        {
+            if (window)
+            {
+                window->onWindowMove();
+            }
+            break;
         }
 
         /*  WM_SIZE is recieved whenever the window is resized  */
@@ -142,7 +163,8 @@ LRESULT CALLBACK winWrap::WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lP
 // moves the window to the specified x and y positions
 void winWrap::Window::moveTo(int newX, int newY)
 {
-    SetWindowPos(m_hwnd, HWND_TOP, newX, newY, getFullWidth(), getFullHeight(), SWP_NOZORDER);
+    RECT wRect = getWinRect();
+    SetWindowPos(m_hwnd, HWND_TOP, newX, newY, wRect.right - wRect.left, wRect.bottom - wRect.top, SWP_NOZORDER);
 }
 
 // resizes the window to the specified width and height
@@ -151,52 +173,20 @@ void winWrap::Window::scaleTo(int width, int height)
     SetWindowPos(m_hwnd, HWND_TOP, 0, 0, width, height, SWP_NOMOVE);
 }
 
-// returns the width of the entire window (including the chrome) in pixels
-int winWrap::Window::getFullWidth()
+// returns the window RECT
+RECT winWrap::Window::getWinRect()
 {
-    RECT rect;
-    GetWindowRect(m_hwnd, &rect);
-    return (rect.right - rect.left);
+    RECT winRect;
+    GetWindowRect(m_hwnd, &winRect);
+    return winRect;
 }
 
-// returns the height of the entire window (including the chrome) in pixels
-int winWrap::Window::getFullHeight()
+// returns the client area RECT
+RECT winWrap::Window::getClientRect()
 {
-    RECT rect;
-    GetWindowRect(m_hwnd, &rect);
-    return (rect.bottom - rect.top);
-}
-
-// returns the width of the client rect in pixels
-int winWrap::Window::getWidth()
-{
-    RECT rect;
-    GetClientRect(m_hwnd, &rect);
-    return (rect.right - rect.left);
-}
-
-// returns the width of the client rect in pixels
-int winWrap::Window::getHeight()
-{
-    RECT rect;
-    GetClientRect(m_hwnd, &rect);
-    return (rect.bottom - rect.top);
-}
-
-// returns the X position of the top-left corner of the window
-int winWrap::Window::getPositionX()
-{
-    RECT rect;
-    GetWindowRect(m_hwnd, &rect);
-    return (rect.left);
-}
-
-// returns the Y position of the top-left corner of the window
-int winWrap::Window::getPositionY()
-{
-    RECT rect;
-    GetWindowRect(m_hwnd, &rect);
-    return (rect.top);
+    RECT clientRect;
+    GetWindowRect(m_hwnd, &clientRect);
+    return clientRect;
 }
 
 /*  Show and update our window  */

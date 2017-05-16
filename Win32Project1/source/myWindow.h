@@ -23,6 +23,7 @@ namespace winWrap
         virtual void onPressEnter();
         virtual void onClose();
         virtual void onMouseMove(POINT mousePos);
+        virtual void onWindowMove();
     private:
         HWND m_textBox1;
         HWND m_button1;

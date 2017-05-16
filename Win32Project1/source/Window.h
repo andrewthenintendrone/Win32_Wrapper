@@ -19,14 +19,8 @@ namespace winWrap
         void show();
         void run();
 
-        int getPositionX();
-        int getPositionY();
-
-        int getFullWidth();
-        int getFullHeight();
-
-        int getWidth();
-        int getHeight();
+        RECT getWinRect();
+        RECT getClientRect();
 
         virtual void onCreate() {};
         virtual void onPaint(HDC hdc) {};
@@ -36,6 +30,7 @@ namespace winWrap
         virtual void onPressEnter() {};
         virtual void onClose();
         virtual void onMouseMove(POINT mousePos) {};
+        virtual void onWindowMove() {};
 
         HWND getHWND();
 
