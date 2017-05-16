@@ -115,6 +115,15 @@ LRESULT CALLBACK winWrap::WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lP
             return 0;
         }
 
+        case WM_MOUSEWHEEL:
+        {
+            if (window)
+            {
+                window->onScroll(GET_WHEEL_DELTA_WPARAM(wParam));
+            }
+            break;
+        }
+
         case WM_MOVE:
         {
             if (window)

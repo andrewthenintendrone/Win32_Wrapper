@@ -117,6 +117,13 @@ void winWrap::myWindow::onPaint(HDC hdc)
 void winWrap::myWindow::onLeftMouseButtonDown(int xPos, int yPos)
 {
 
+    m_current = (rand() % (pokemon.size() - 1));
+    delete m_image;
+    m_image = new Gdiplus::Image((L"./img/" + pokemon[m_current] + L".png").c_str());
+    m_picWidth = m_image->GetWidth();
+    m_picHeight = m_image->GetHeight();
+    InvalidateRect(m_hwnd, &m_clientRect, false);
+    UpdateWindow(m_hwnd);
 }
 
 void winWrap::myWindow::onLeftClickButton(HWND buttonID)
@@ -171,18 +178,52 @@ void winWrap::myWindow::onClose()
 
 void winWrap::myWindow::onMouseMove(POINT mousePos)
 {
-    RECT wRect = getWinRect();
+    //RECT wRect = getWinRect();
     //if (mousePos.x > (wRect.right - 60) && mousePos.x < (wRect.right) && mousePos.y > wRect.top && mousePos.y < wRect.top + 25)
     //{
-        int xJump = (rand() % 2 == 0 ? (wRect.left - 1) : (wRect.left + 1));
-        int yJump = (rand() % 2 == 0 ? (wRect.top - 1) : (wRect.top + 1));
-        moveTo(xJump, yJump);
-        InvalidateRect(m_hwnd, NULL, false);
-        UpdateWindow(m_hwnd);
+    //    int xJump = (rand() % 2 == 0 ? (wRect.left - 50) : (wRect.left + 50));
+    //    int yJump = (rand() % 2 == 0 ? (wRect.top - 50) : (wRect.top + 50));
+    //    moveTo(xJump, yJump);
+    //    InvalidateRect(m_hwnd, NULL, false);
+    //    UpdateWindow(m_hwnd);
     //}
 }
 
 void winWrap::myWindow::onWindowMove()
 {
 
+}
+
+void winWrap::myWindow::onScroll(int scrollDelta)
+{
+    if (scrollDelta < 0)
+    {
+        if (m_current > 0)
+        {
+            m_current--;
+        }
+        else
+        {
+            m_current = (pokemon.size() - 1);
+        }
+    }
+    if (scrollDelta > 0)
+    {
+        if (m_current < (pokemon.size() - 1))
+        {
+            m_current++;
+        }
+        else
+        {
+            m_current = 0;
+        }
+    }
+    //m_current = (rand() % (pokemon.size() - 1));
+
+    delete m_image;
+    m_image = new Gdiplus::Image((L"./img/" + pokemon[m_current] + L".png").c_str());
+    m_picWidth = m_image->GetWidth();
+    m_picHeight = m_image->GetHeight();
+    InvalidateRect(m_hwnd, &m_clientRect, false);
+    UpdateWindow(m_hwnd);
 }

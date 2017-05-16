@@ -31,6 +31,7 @@ namespace winWrap
         virtual void onClose();
         virtual void onMouseMove(POINT mousePos) {};
         virtual void onWindowMove() {};
+        virtual void onScroll(int scrollDelta) {};
 
         HWND getHWND();
 

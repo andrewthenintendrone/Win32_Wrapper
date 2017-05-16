@@ -24,6 +24,7 @@ namespace winWrap
         virtual void onClose();
         virtual void onMouseMove(POINT mousePos);
         virtual void onWindowMove();
+        virtual void onScroll(int scrollDelta);
     private:
         HWND m_textBox1;
         HWND m_button1;
