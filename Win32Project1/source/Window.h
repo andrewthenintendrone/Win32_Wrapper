@@ -25,6 +25,7 @@ namespace winWrap
         virtual void onCreate() {};
         virtual void onPaint(HDC hdc) {};
         virtual void onLeftMouseButtonDown(int xPos, int yPos) {};
+        virtual void onRightMouseButtonDown(int xPos, int yPos) {};
         virtual void onLeftClickButton(HWND buttonID) {};
         virtual void onResize() {};
         virtual void onPressEnter() {};

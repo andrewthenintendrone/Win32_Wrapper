@@ -77,6 +77,16 @@ LRESULT CALLBACK winWrap::WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lP
             break;
         }
 
+        /*  WM_RBUTTONDOWN is recieved when the right mouse button is pressed  */
+        case WM_RBUTTONDOWN:
+        {
+            if (window)
+            {
+                window->onRightMouseButtonDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+            }
+            break;
+        }
+
         /*  WM_COMMAND is recieved whenever the user interacts with the window  */
         case WM_COMMAND:
         {

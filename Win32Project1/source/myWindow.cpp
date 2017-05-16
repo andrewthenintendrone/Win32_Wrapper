@@ -116,8 +116,34 @@ void winWrap::myWindow::onPaint(HDC hdc)
 
 void winWrap::myWindow::onLeftMouseButtonDown(int xPos, int yPos)
 {
+    if (m_current < (pokemon.size() - 1))
+    {
+        m_current++;
+    }
+    else
+    {
+        m_current = 0;
+    }
 
-    m_current = (rand() % (pokemon.size() - 1));
+    delete m_image;
+    m_image = new Gdiplus::Image((L"./img/" + pokemon[m_current] + L".png").c_str());
+    m_picWidth = m_image->GetWidth();
+    m_picHeight = m_image->GetHeight();
+    InvalidateRect(m_hwnd, &m_clientRect, false);
+    UpdateWindow(m_hwnd);
+}
+
+void winWrap::myWindow::onRightMouseButtonDown(int xPos, int yPos)
+{
+    if (m_current > 0)
+    {
+        m_current--;
+    }
+    else
+    {
+        m_current = (pokemon.size() - 1);
+    }
+
     delete m_image;
     m_image = new Gdiplus::Image((L"./img/" + pokemon[m_current] + L".png").c_str());
     m_picWidth = m_image->GetWidth();
