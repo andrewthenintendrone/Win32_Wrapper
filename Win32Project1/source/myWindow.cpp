@@ -2,7 +2,7 @@
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
 
-void winWrap::myWindow::create(char appName[], char className[], RECT r)
+void winWrap::myWindow::create(LPCTSTR className, LPCTSTR windowTitle, DWORD dwStyle, int xPosition, int yPosition, int width, int height, HWND parent)
 {
     HINSTANCE hinst = GetModuleHandle(NULL);
 
@@ -27,10 +27,10 @@ void winWrap::myWindow::create(char appName[], char className[], RECT r)
     m_hwnd = CreateWindowEx(
         WS_EX_OVERLAPPEDWINDOW,
         className,
-        appName,
-        WS_OVERLAPPEDWINDOW | WS_THICKFRAME | WS_MAXIMIZEBOX,
-        r.left, r.top,
-        r.right - r.left, r.bottom - r.top,
+        windowTitle,
+        dwStyle,
+        xPosition, yPosition,
+        width, height,
         NULL, NULL,
         m_wndclass.hInstance,
         (LPVOID)this);

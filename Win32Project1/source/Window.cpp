@@ -10,115 +10,118 @@ LRESULT CALLBACK winWrap::WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lP
     switch (iMsg)
     {
         /*  WM_CREATE is the first message recieved from windows  */
-    case WM_NCCREATE:
-    {
-        LPCREATESTRUCT lpcs = reinterpret_cast<LPCREATESTRUCT>(lParam);
-        window = static_cast<winWrap::Window*>(lpcs->lpCreateParams);
-        SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(window));
-
-        // Create an off-screen DC for double-buffering
-        HDC hdc = GetDC(hwnd);
-        window->m_hdcMem = CreateCompatibleDC(hdc);
-        int screenWidth = GetSystemMetrics(SM_CXSCREEN);
-        int screenHeight = GetSystemMetrics(SM_CYSCREEN);
-        window->m_hbmMem = CreateCompatibleBitmap(hdc, screenWidth * 2, screenHeight);
-        SelectObject(window->m_hdcMem, window->m_hbmMem);
-        ReleaseDC(hwnd, hdc);
-
-        break;
-    }
-
-    case WM_CREATE:
-    {
-        if (window)
+        case WM_NCCREATE:
         {
-            window->onCreate();
+            LPCREATESTRUCT lpcs = reinterpret_cast<LPCREATESTRUCT>(lParam);
+            window = static_cast<winWrap::Window*>(lpcs->lpCreateParams);
+            SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(window));
+
+            // Create an off-screen DC for double-buffering
+            HDC hdc = GetDC(hwnd);
+            window->m_hdcMem = CreateCompatibleDC(hdc);
+            int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+            int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+            window->m_hbmMem = CreateCompatibleBitmap(hdc, screenWidth * 2, screenHeight);
+            SelectObject(window->m_hdcMem, window->m_hbmMem);
+            ReleaseDC(hwnd, hdc);
+
+            break;
         }
-        break;
-    }
 
-    /*  We receive WM_PAINT every time window is updated  */
-    case WM_PAINT:
-    {
-        if (window)
+        /*  WM_CREATE is called when the window is created  */
+        case WM_CREATE:
         {
-            window->onPaint(window->m_hdcMem);
-
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hwnd, &ps);
-
-            RECT clientRect;
-            GetClientRect(hwnd, &clientRect);
-            int winWidth = clientRect.right - clientRect.left;
-            int winHeight = clientRect.bottom - clientRect.top;
-
-            // Transfer the off-screen DC to the screen
-            BitBlt(hdc, 0, 0, winWidth, winHeight, window->m_hdcMem, 0, 0, SRCCOPY);
-
-            EndPaint(hwnd, &ps);
-        }
-        break;
-    }
-
-
-    case WM_ERASEBKGND:
-    {
-        return 1;
-    }
-
-    /*  WM_LBUTTONDOWN is recieved when the left mouse button is pressed  */
-    case WM_LBUTTONDOWN:
-    {
-        if (window)
-        {
-            window->onLeftMouseButtonDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-        }
-        break;
-    }
-
-    /*  WM_COMMAND is recieved whenever the user interacts with the window  */
-    case WM_COMMAND:
-    {
-        if (window)
-        {
-            // a button has been clicked
-            if (((HWND)lParam) && (HIWORD(wParam) == BN_CLICKED))
+            if (window)
             {
-                window->onLeftClickButton((HWND)lParam);
+                window->onCreate();
             }
+            break;
         }
-        break;
-    }
 
-    /*  WM_SIZE is recieved whenever the window is resized  */
-    case WM_SIZE:
-    {
-        if (window)
+        /*  WM_PAINT is recieved every time the window is redrawn  */
+        case WM_PAINT:
         {
-            window->onResize();
-        }
-        break;
-    }
+            if (window)
+            {
+                window->onPaint(window->m_hdcMem);
 
-    case WM_CLOSE:
-    {
-        if (window)
+                PAINTSTRUCT ps;
+                HDC hdc = BeginPaint(hwnd, &ps);
+
+                RECT clientRect;
+                GetClientRect(hwnd, &clientRect);
+                int winWidth = clientRect.right - clientRect.left;
+                int winHeight = clientRect.bottom - clientRect.top;
+
+                // Transfer the off-screen DC to the screen
+                BitBlt(hdc, 0, 0, winWidth, winHeight, window->m_hdcMem, 0, 0, SRCCOPY);
+
+                EndPaint(hwnd, &ps);
+            }
+            break;
+        }
+
+        /*  WM_ERASEBKGND is recieved when the windows background is erased  */
+        case WM_ERASEBKGND:
         {
-            window->onClose();
+            return 1;
         }
-        break;
-    }
 
-    case WM_DESTROY:
-        if (window)
+        /*  WM_LBUTTONDOWN is recieved when the left mouse button is pressed  */
+        case WM_LBUTTONDOWN:
         {
-            // Free-up the off-screen DC
-            DeleteObject(window->m_hbmMem);
-            DeleteDC(window->m_hdcMem);
+            if (window)
+            {
+                window->onLeftMouseButtonDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+            }
+            break;
         }
 
-        break;
+        /*  WM_COMMAND is recieved whenever the user interacts with the window  */
+        case WM_COMMAND:
+        {
+            if (window)
+            {
+                // a button has been clicked
+                if (((HWND)lParam) && (HIWORD(wParam) == BN_CLICKED))
+                {
+                    window->onLeftClickButton((HWND)lParam);
+                }
+            }
+            break;
+        }
 
+        /*  WM_SIZE is recieved whenever the window is resized  */
+        case WM_SIZE:
+        {
+            if (window)
+            {
+                window->onResize();
+            }
+            break;
+        }
+
+        /*  WM_CLOSE is recieved when the user goes to close the window  (X button, alt-F4, etc.)  */
+        case WM_CLOSE:
+        {
+            if (window)
+            {
+                window->onClose();
+            }
+            break;
+        }
+
+        /*  WM_DESTROY is called when the window is being destroyed  */
+        case WM_DESTROY:
+        {
+            if (window)
+            {
+                // Free-up the off-screen DC
+                DeleteObject(window->m_hbmMem);
+                DeleteDC(window->m_hdcMem);
+            }
+            break;
+        }
     }
     /*  Send any messages we don't handle to default window procedure  */
     return DefWindowProc(hwnd, iMsg, wParam, lParam);

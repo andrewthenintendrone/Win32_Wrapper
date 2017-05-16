@@ -10,7 +10,7 @@ int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR szCmdLine, in
     Gdiplus::GdiplusStartup(&GDItoken, &gdiplusStartupInput, NULL);
 
     winWrap::myWindow w;
-    w.create("Pokemon", "TEST", RECT{ 100, 100, 512, 512 });
+    w.create("test", "Window Title", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 100, 100, 256, 256, NULL);
     w.show();
     w.run();
 

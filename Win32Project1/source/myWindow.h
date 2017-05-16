@@ -13,9 +13,9 @@ namespace winWrap
         myWindow() { m_image = nullptr; };
         ~myWindow() {};
 
-        void create(char appName[], char className[], RECT r);
-
+        void create(LPCTSTR className, LPCTSTR windowTitle, DWORD dwStyle, int xPosition, int yPosition, int width, int height, HWND parent);
     protected:
+
         virtual void onCreate();
         virtual void onPaint(HDC hdc);
         virtual void onLeftMouseButtonDown(int xPos, int yPos);
