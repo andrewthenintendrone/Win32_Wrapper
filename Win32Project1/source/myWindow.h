@@ -28,6 +28,7 @@ namespace win32Wrapper
         RECT m_clientRect;
         int m_width;
         int m_height;
+        HBRUSH m_backgroundBrush;
 
         Gdiplus::Image* m_image;
     };

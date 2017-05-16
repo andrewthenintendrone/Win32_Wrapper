@@ -90,6 +90,7 @@ void myWindow::create(char appName[], char className[], RECT r)
 
 void myWindow::onCreate()
 {
+    m_backgroundBrush = CreateSolidBrush(RGB(30, 30, 30));
     m_image = new Gdiplus::Image(L"test.jpg");
     m_picWidth = m_image->GetWidth();
     m_picHeight = m_image->GetHeight();
@@ -97,11 +98,12 @@ void myWindow::onCreate()
 
 void myWindow::onPaint(HDC hdc)
 {
-    // Draw into hdcMem here
-
     GetClientRect(m_hwnd, &m_clientRect);
     m_width = m_clientRect.right - m_clientRect.left;
     m_height = m_clientRect.bottom - m_clientRect.top;
+
+    // Draw into hdcMem here
+    FillRect(hdc, &m_clientRect, m_backgroundBrush);
     Gdiplus::Rect clientRect(m_clientRect.left, m_clientRect.top, m_width, m_height);
 
     Gdiplus::Graphics grpx(hdc);
