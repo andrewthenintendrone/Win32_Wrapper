@@ -127,6 +127,34 @@ LRESULT CALLBACK winWrap::WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lP
     return DefWindowProc(hwnd, iMsg, wParam, lParam);
 }
 
+// moves the window to the specified x and y positions
+void winWrap::Window::moveTo(int newX, int newY)
+{
+    SetWindowPos(m_hwnd, HWND_TOP, newX, newY, getWidth(), getHeight(), SWP_NOZORDER);
+}
+
+// resizes the window to the specified width and height
+void winWrap::Window::scaleTo(int width, int height)
+{
+    SetWindowPos(m_hwnd, HWND_TOP, 0, 0, width, height, SWP_NOMOVE);
+}
+
+// returns the width of the client rect in pixels
+int winWrap::Window::getWidth()
+{
+    RECT rect;
+    GetClientRect(m_hwnd, &rect);
+    return (rect.right - rect.left);
+}
+
+// returns the width of the client rect in pixels
+int winWrap::Window::getHeight()
+{
+    RECT rect;
+    GetClientRect(m_hwnd, &rect);
+    return (rect.bottom - rect.top);
+}
+
 /*  Show and update our window  */
 void winWrap::Window::show()
 {

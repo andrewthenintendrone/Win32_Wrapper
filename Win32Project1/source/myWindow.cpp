@@ -2,7 +2,7 @@
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
 
-void winWrap::myWindow::create(LPCTSTR className, LPCTSTR windowTitle, DWORD dwStyle, int xPosition, int yPosition, int width, int height, HWND parent)
+void winWrap::myWindow::create(LPCTSTR windowTitle)
 {
     HINSTANCE hinst = GetModuleHandle(NULL);
 
@@ -17,7 +17,7 @@ void winWrap::myWindow::create(LPCTSTR className, LPCTSTR windowTitle, DWORD dwS
     m_wndclass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
     m_wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
     m_wndclass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
-    m_wndclass.lpszClassName = className;
+    m_wndclass.lpszClassName = "className";
     m_wndclass.lpszMenuName = NULL;
 
     /*  Register a new window class with Windows  */
@@ -26,11 +26,11 @@ void winWrap::myWindow::create(LPCTSTR className, LPCTSTR windowTitle, DWORD dwS
     /*  Create a window based on our new class  */
     m_hwnd = CreateWindowEx(
         WS_EX_OVERLAPPEDWINDOW,
-        className,
+        "className",
         windowTitle,
-        dwStyle,
-        xPosition, yPosition,
-        width, height,
+        WS_OVERLAPPEDWINDOW,
+        0, 0,
+        0, 0,
         NULL, NULL,
         m_wndclass.hInstance,
         (LPVOID)this);
@@ -91,8 +91,8 @@ void winWrap::myWindow::onCreate()
     srand((unsigned int)time(NULL));
     m_backgroundBrush = CreateSolidBrush(RGB(30, 30, 30));
     
-    m_pick = (rand() % (pics.size() - 1));
-    m_image = new Gdiplus::Image((L"./img/" + pics[m_pick] + L".png").c_str());
+    m_current = (rand() % (pokemon.size() - 1));
+    m_image = new Gdiplus::Image((L"./img/" + pokemon[m_current] + L".png").c_str());
     m_picWidth = m_image->GetWidth();
     m_picHeight = m_image->GetHeight();
 }
@@ -150,10 +150,10 @@ void winWrap::myWindow::onPressEnter()
         SendMessage(m_button1, WM_SETTEXT, 0, (LPARAM)(LPSTR)"YOU ARE AN IDIOT");
         SendMessage(m_loadBar1, PBM_DELTAPOS, 100, 0);
     }*/
-    m_pick = (rand() % (pics.size() - 1));
+    m_current = (rand() % (pokemon.size() - 1));
 
     delete m_image;
-    m_image = new Gdiplus::Image((L"./img/" + pics[m_pick] + L".png").c_str());
+    m_image = new Gdiplus::Image((L"./img/" + pokemon[m_current] + L".png").c_str());
     m_picWidth = m_image->GetWidth();
     m_picHeight = m_image->GetHeight();
     InvalidateRect(m_hwnd, &m_clientRect, false);

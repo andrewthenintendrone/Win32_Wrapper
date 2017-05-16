@@ -14,8 +14,13 @@ namespace winWrap
     class Window
     {
     public:
+        void moveTo(int xPosition, int yPosition);
+        void scaleTo(int width, int height);
         void show();
         void run();
+
+        int getWidth();
+        int getHeight();
 
         virtual void onCreate() {};
         virtual void onPaint(HDC hdc) {};
@@ -31,7 +36,7 @@ namespace winWrap
         Window() : m_hdcMem(NULL), m_hbmMem(NULL) {};
         virtual ~Window() = 0 {};
 
-        virtual void create(LPCTSTR className, LPCTSTR windowTitle, DWORD dwStyle, int xPosition, int yPosition, int width, int height, HWND parent) = 0 {};
+        virtual void create(LPCTSTR windowTitle) = 0 {};
         void drawImage(HWND hwnd, const Gdiplus::Image& image, RECT placement);
 
         HWND m_hwnd;
