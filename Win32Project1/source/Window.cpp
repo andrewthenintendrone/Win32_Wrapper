@@ -2,7 +2,7 @@
 #include "myWindow.h"
 
 /*  Window procedure  */
-LRESULT CALLBACK winWrap::WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
     winWrap::Window* window = reinterpret_cast<winWrap::Window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 
@@ -38,6 +38,10 @@ LRESULT CALLBACK winWrap::WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lP
             break;
         }
 
+        case WM_KEYDOWN:
+        {
+            // handle key events
+        }
         /*  WM_PAINT is recieved every time the window is redrawn  */
         case WM_PAINT:
         {
@@ -246,14 +250,9 @@ void winWrap::Window::onClose()
     // are you sure? etc.
     /*if (MessageBox(m_hwnd, "Save changes to untitled?", "Save?", MB_YESNOCANCEL | MB_ICONEXCLAMATION | MB_DEFBUTTON1) != IDCANCEL)
     {*/
-        PostQuitMessage(0);
-        return;
+    PostQuitMessage(0);
+    return;
     //}
-}
-
-void winWrap::Window::drawImage(HWND hwnd, const Gdiplus::Image& image, RECT placement)
-{
-
 }
 
 HWND winWrap::Window::getHWND()
