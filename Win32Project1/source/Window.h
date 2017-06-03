@@ -17,7 +17,7 @@ namespace winWrap
     public:
         void moveTo(int xPosition, int yPosition);
         void scaleTo(int width, int height);
-        void addChild() {}; // to do
+        void addChild();
         void show();
         void run();
 

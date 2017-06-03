@@ -196,6 +196,11 @@ void winWrap::Window::scaleTo(int width, int height)
     SetWindowPos(m_hwnd, HWND_TOP, 0, 0, width, height, SWP_NOMOVE);
 }
 
+void winWrap::Window::addChild()
+{
+    // to do
+}
+
 // returns the window RECT
 RECT winWrap::Window::getWinRect()
 {
